@@ -41,8 +41,6 @@ const player = document.getElementById('player');
 const targetCol = document.getElementById('target');
 const nativeCol = document.getElementById('native');
 const playPauseBtn = document.getElementById('playPause');
-const loadBtn = document.getElementById('loadAudio');
-const audioUrlInput = document.getElementById('audioUrl');
 const autoScroll = document.getElementById('autoScroll');
 const targetLabel = document.getElementById('targetLabel');
 const nativeLabel = document.getElementById('nativeLabel');
@@ -106,10 +104,6 @@ playPauseBtn.addEventListener('click', () => {
   else { player.pause(); playPauseBtn.textContent = 'Play'; }
 });
 
-loadBtn.addEventListener('click', () => {
-  const url = audioUrlInput.value.trim();
-  if (url) { player.src = url; player.load(); playPauseBtn.textContent = 'Play'; }
-});
 
 // Wizard
 const wizard = document.getElementById('wizard');
@@ -250,3 +244,4 @@ document.addEventListener('keydown', (e) => {
     if (typeof wizard !== 'undefined' && wizard && !wizard.hidden) hideWizard();
   }
 });
+

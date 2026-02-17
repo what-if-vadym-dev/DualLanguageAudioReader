@@ -20,7 +20,7 @@
         </select>
       </div>
       <div class="wizard-row">
-        <label for="nativeLang">Your mother language</label>
+        <label for="nativeLang">Your Mother Tongue Language</label>
         <select id="nativeLang">
           <option value="en-US">English (US)</option>
           <option value="nb-NO">Norwegian (Bokmål)</option>
@@ -98,11 +98,8 @@
   <header>
     <h1>Dual-Language Audio Reader</h1>
     <div class="controls">
-      <label>Audio URL:
-        <input id="audioUrl" type="text" placeholder="https://...mp3" />
-      </label>
-      <button id="loadAudio">Load</button>
-      <button id="playPause">Play</button> <button id="openWizardBtn">Set Up Your Reading</button>
+      <button id="playPause">Play</button>
+      <button id="openWizardBtn">Set Up Your Reading</button>
     </div>
     <audio id="player" preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
   </header>
@@ -113,7 +110,7 @@
       <div id="target" class="segments"></div>
     </section>
     <section class="column">
-      <h2>Mother Language <span id="nativeLabel" class="label"></span></h2>
+      <h2>Mother Tongue Language <span id="nativeLabel" class="label"></span></h2>
       <div id="native" class="segments"></div>
     </section>
   </main>
@@ -125,6 +122,9 @@
   <script src="/app.js"></script>
 </body>
 </html>
+
+
+
 
 
 

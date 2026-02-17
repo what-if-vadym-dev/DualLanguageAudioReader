@@ -6,6 +6,34 @@ UI
 
 implement ui, there should be two column with text, target language to learn and your mother language, once it is played, both text have make down of the reading part.
 
+Session Prompts Log (2026-02-18)
+- .NET 8 solution skeleton with projects and folder structure
+- run solution
+- implement ui, there should be two column with text, target language to learn and your mother language
+- connect ui with the backend
+- update prompts file with the changes to ui
+- mark completed tasks in the prompts.md file
+- add page wizard: what language to learn, what is your mother language, what is the level
+- update level to have a1 a2 b1 b2 c1 levels
+- connect language wizard with backend, persist to database
+- add topics dropdown with static list; note dynamic generation by country/level in prompts
+- once start reading pressed, dialog is hidden and main screen is shown; add button "Set Up Your Reading"
+- on start reading, save settings to backend and hide dialog
+- add cross on the dialog "Set Up Your Reading" to close it
+- add function to close dialog when you click cross
+- esc to close
+- close function is not called on click reading/cross/esc
+- hide the window on "Start Reading" and add logs to console
+- push to https://github.com/what-if-vadym-dev/DualLanguageAudioReader
+- create docker image and run it in docker desktop
+- update README.md with docker run instructions
+- create basic ci/cd with test and prod environments
+- deploy to Azure container host with minimum power consumption
+- add infrastructure pipeline with provision using the given values
+- add README steps for AZURE_CREDENTIALS secret
+- stop in visual studio code
+- how to open it in the browser
+
 Generate personalized tests tailored to different proficiency levels and multiple languages.
 Provide machine‑generated text‑to‑speech (TTS) audio for the free version.
 For the paid version, allow users to:
@@ -909,3 +937,6 @@ Feature: Dynamic Topics Generation
 - Data source: Curated content taxonomy tagged by country/locale and level; fallback to generic topics when locale-specific content is missing.
 - API: `/api/v1/topics?locale=nb-NO&level=B1` returns grouped topics (categories → items) for the wizard.
 - UI: Populate topics select via API; preserve grouping (optgroups) and remember last choice in preferences.
+
+
+

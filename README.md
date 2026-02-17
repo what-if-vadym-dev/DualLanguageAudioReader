@@ -57,6 +57,17 @@ Stop via compose:
 docker compose down
 ```
 
+
+## GitHub Secrets
+
+Create a service principal and add its JSON output as the `AZURE_CREDENTIALS` repository secret:
+
+```powershell
+az ad sp create-for-rbac --name "dual-language-audio-reader-gha" --role Contributor --scopes /subscriptions/14bcc9f5-e7a6-42aa-906f-c0ae9c69d8b3 --sdk-auth
+```
+
+Then run the workflow `infra-provision` from the Actions tab.
+
 ## Notes
 - A repo-scoped nuget.config is included to use nuget.org and avoid private feed prompts.
 - Solution file created as ExamPrepar.slnx (newer SDK). Use it with dotnet sln ExamPrepar.slnx ...
@@ -66,3 +77,5 @@ docker compose down
 - Implement persistence (e.g., EF Core) in Infrastructure.
 - Replace the template WeatherForecast with your API endpoints.
 - Add integration tests and CI pipeline as needed.
+
+

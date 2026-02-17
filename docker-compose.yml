@@ -1,0 +1,6 @@
+services:
+  api:
+    image: dual-language-audio-reader
+    container_name: dual-language-audio-reader
+    ports:
+      - "5180:8080"

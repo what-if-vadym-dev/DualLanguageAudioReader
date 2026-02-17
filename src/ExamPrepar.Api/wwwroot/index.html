@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dual-Language Reader</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="wizard" class="wizard-overlay" hidden>
+    <div class="wizard-card">
+      <div class="wizard-header"><h2>Set Up Your Reading</h2><button id="wizardClose" aria-label="Close dialog" onclick="hideWizard()">×</button></div>
+      <div class="wizard-row">
+        <label for="targetLang">Language to learn</label>
+        <select id="targetLang">
+          <option value="nb-NO">Norwegian (Bokmål)</option>
+          <option value="es-ES">Spanish (Spain)</option>
+          <option value="de-DE">German</option>
+          <option value="fr-FR">French</option>
+        </select>
+      </div>
+      <div class="wizard-row">
+        <label for="nativeLang">Your mother language</label>
+        <select id="nativeLang">
+          <option value="en-US">English (US)</option>
+          <option value="nb-NO">Norwegian (Bokmål)</option>
+          <option value="es-ES">Spanish (Spain)</option>
+          <option value="de-DE">German</option>
+          <option value="fr-FR">French</option>
+        </select>
+      </div>
+      <div class="wizard-row">
+        <label for="level">Level</label>
+        <select id="level">
+          <option value="A1">A1</option>
+          <option value="A2">A2</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+        </select>
+      </div>
+            <div class="wizard-row">
+        <label for="topic">Topic</label>
+        <select id="topic">
+          <optgroup label="Personal & Daily Life">
+            <option value="introductions">Introductions - Present yourself, your background, family.</option>
+            <option value="daily-routines">Daily routines - What you do on a typical day.</option>
+            <option value="hobbies-interests">Hobbies and interests - Sports, music, reading, etc.</option>
+            <option value="travel-experiences">Travel experiences - Places you\'ve visited, dream destinations.</option>
+            <option value="food-cooking">Food and cooking - Favorite dishes, Norwegian food, healthy eating.</option>
+            <option value="shopping">Shopping - Clothes, groceries, online shopping.</option>
+            <option value="housing">Housing - Describe your home, renting vs owning, moving.</option>
+            <option value="transportation">Transportation - How you commute, public transport vs car.</option>
+            <option value="weather-seasons">Weather and seasons - Favorite season, climate differences.</option>
+            <option value="daily-technology">Technology in daily life - Mobile phones, social media, internet use.</option>
+          </optgroup>
+          <optgroup label="Work & Education">
+            <option value="job-career">Job and career - Your work, responsibilities, future plans.</option>
+            <option value="education">Education - School experiences, learning Norwegian, lifelong learning.</option>
+            <option value="work-life-balance">Work-life balance - Stress, free time, productivity.</option>
+            <option value="future-goals">Future goals - Career ambitions, personal development.</option>
+          </optgroup>
+          <optgroup label="Health & Lifestyle">
+            <option value="health-fitness">Health and fitness - Exercise habits, healthy living.</option>
+            <option value="illness-healthcare">Illness and healthcare - Visiting a doctor, Norwegian health system.</option>
+            <option value="mental-health">Mental health - Stress management, relaxation techniques.</option>
+          </optgroup>
+          <optgroup label="Culture & Society">
+            <option value="norwegian-traditions">Norwegian traditions - Holidays, celebrations, national days.</option>
+            <option value="culture-comparison">Your culture vs Norwegian culture - Differences and similarities.</option>
+            <option value="music-art-lit">Music, art, and literature - Favorite artists, concerts.</option>
+            <option value="media-entertainment">Media and entertainment - TV shows, movies, books.</option>
+          </optgroup>
+          <optgroup label="Environment & Nature">
+            <option value="nature-in-norway">Nature in Norway - Fjords, mountains, outdoor activities.</option>
+            <option value="environmental-issues">Environmental issues - Recycling, climate change.</option>
+            <option value="sustainable-living">Sustainable living - Eco-friendly habits.</option>
+          </optgroup>
+          <optgroup label="Social Topics">
+            <option value="friendship-relationships">Friendship and relationships - Making friends in Norway.</option>
+            <option value="social-media">Social media - Pros and cons, privacy.</option>
+            <option value="volunteering-community">Volunteering and community - Helping others, charity work.</option>
+          </optgroup>
+          <optgroup label="Abstract & Opinion-Based">
+            <option value="technology-future">Technology and the future - AI, automation.</option>
+            <option value="education-system">Education system - Pros and cons.</option>
+            <option value="immigration-integration">Immigration and integration - Experiences, challenges.</option>
+            <option value="equality-diversity">Equality and diversity - Gender roles, inclusion.</option>
+            <option value="work-culture-norway">Work culture in Norway - Flat hierarchy, teamwork.</option>
+          </optgroup>
+        </select>
+      </div><div class="wizard-actions">
+        <button id="wizardStart" onclick="hideWizard()">Start Reading</button>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <h1>Dual-Language Audio Reader</h1>
+    <div class="controls">
+      <label>Audio URL:
+        <input id="audioUrl" type="text" placeholder="https://...mp3" />
+      </label>
+      <button id="loadAudio">Load</button>
+      <button id="playPause">Play</button> <button id="openWizardBtn">Set Up Your Reading</button>
+    </div>
+    <audio id="player" preload="metadata" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  </header>
+
+  <main>
+    <section class="column">
+      <h2>Target Language <span id="targetLabel" class="label"></span></h2>
+      <div id="target" class="segments"></div>
+    </section>
+    <section class="column">
+      <h2>Mother Language <span id="nativeLabel" class="label"></span></h2>
+      <div id="native" class="segments"></div>
+    </section>
+  </main>
+
+  <footer>
+    <label><input type="checkbox" id="autoScroll" checked /> Auto-scroll while playing</label>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

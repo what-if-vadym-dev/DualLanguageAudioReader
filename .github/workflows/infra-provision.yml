@@ -44,12 +44,13 @@ jobs:
           ACR_LOGIN_SERVER=$(az acr show --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" --query loginServer -o tsv)
           ACR_USERNAME=$(az acr credential show --name "$ACR_NAME" --query username -o tsv)
           ACR_PASSWORD=$(az acr credential show --name "$ACR_NAME" --query "passwords[0].value" -o tsv)
+          IMAGE_TAG=${GITHUB_SHA::7}
 
           echo "$ACR_PASSWORD" | docker login "$ACR_LOGIN_SERVER" -u "$ACR_USERNAME" --password-stdin
 
-          docker build -t "$IMAGE_NAME:latest" .
-          docker tag "$IMAGE_NAME:latest" "$ACR_LOGIN_SERVER/$IMAGE_NAME:latest"
-          docker push "$ACR_LOGIN_SERVER/$IMAGE_NAME:latest"
+          docker build -t "$IMAGE_NAME:$IMAGE_TAG" .
+          docker tag "$IMAGE_NAME:$IMAGE_TAG" "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG"
+          docker push "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG"
 
           if ! az containerapp env show --name "$CONTAINERAPP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
             az containerapp env create --name "$CONTAINERAPP_ENV" --resource-group "$RESOURCE_GROUP" --location "$LOCATION"
@@ -59,13 +60,13 @@ jobs:
             az containerapp update \
               --name "$CONTAINERAPP_NAME" \
               --resource-group "$RESOURCE_GROUP" \
-              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:latest"
+              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG"
           else
             az containerapp create \
               --name "$CONTAINERAPP_NAME" \
               --resource-group "$RESOURCE_GROUP" \
               --environment "$CONTAINERAPP_ENV" \
-              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:latest" \
+              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG" \
               --registry-server "$ACR_LOGIN_SERVER" \
               --registry-username "$ACR_USERNAME" \
               --registry-password "$ACR_PASSWORD" \

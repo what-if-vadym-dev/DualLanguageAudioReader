@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
 
 var conn = builder.Configuration.GetConnectionString("Default") ?? "Data Source=exam.db";
 builder.Services.AddDbContext<ExamDbContext>(opts => opts.UseSqlite(conn));
@@ -19,6 +21,14 @@ builder.Services.AddScoped<IExamRepository, EfExamRepository>();
 builder.Services.AddScoped<ExamService>();
 
 var app = builder.Build();
+
+var llmEndpoint = app.Configuration["Llm:Endpoint"] ?? app.Configuration["AZURE_OPENAI_ENDPOINT"];
+var llmDeployment = app.Configuration["Llm:Deployment"] ?? app.Configuration["AZURE_OPENAI_DEPLOYMENT"];
+var llmApiKey = app.Configuration["Llm:ApiKey"] ?? app.Configuration["AZURE_OPENAI_API_KEY"];
+if (string.IsNullOrWhiteSpace(llmEndpoint) || string.IsNullOrWhiteSpace(llmDeployment) || string.IsNullOrWhiteSpace(llmApiKey))
+{
+    app.Logger.LogWarning("Azure OpenAI is not configured. Set AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT, AZURE_OPENAI_API_KEY, and optionally AZURE_OPENAI_API_VERSION.");
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -67,4 +77,7 @@ app.MapGeneration();
 app.Run();
 
 public partial class Program {}
+
+
+
 

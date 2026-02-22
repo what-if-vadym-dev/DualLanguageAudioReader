@@ -33,6 +33,44 @@ Session Prompts Log (2026-02-18)
 - add README steps for AZURE_CREDENTIALS secret
 - stop in visual studio code
 - how to open it in the browser
+- push to master
+- remove from ui audio URL textbox and load button
+- change text "Mother Language" to "Mother Tongue Language"
+- update deploy pipeline with the changes related to old ui
+- container version in azure still has a old ui
+- redeploy azure with the latest version
+- how to fix
+- how to create in azure portal
+- how to get test prod urls from azure
+- add please
+- commit master
+- add all prompts to the prompts.md file
+- run app
+- add exam name to Set Up Your Reading based on selected language; fill possible exam types
+- place exam name above level
+- build exam names for languages from government sites
+- build a collection of exam names based on selected language to learn
+- exam name drop box is empty
+- introduce REST API method to cache all possible topics from LLM prompt template
+- implement two tasks: real LLM call with cache, and GET route for cached topics
+- use Azure OpenAI
+- add a startup warning when Azure OpenAI is not configured
+- restart the app so new endpoints are active
+- run swagger
+- run test API call to populate cache for Norway B2
+- give response of the cache
+- introduce REST API method to cache full text for all topics in Norwegian
+- test API call for NO B1
+- stop API
+- run API
+- run endpoint to populate topics for NO B1 and then texts for NO B1
+- write output for texts NO B1
+- how to set Azure OpenAI env vars and restart
+- how to set up cheap OpenAI in Azure
+- use the same subscription for infra
+- update provision infra add Azure OpenAI deployment in subscription 14bcc9f5-e7a6-42aa-906f-c0ae9c69d8b3
+- run infra-provision from here
+- add all prompts to the file prompts.md
 
 Generate personalized tests tailored to different proficiency levels and multiple languages.
 Provide machine‑generated text‑to‑speech (TTS) audio for the free version.
@@ -937,6 +975,13 @@ Feature: Dynamic Topics Generation
 - Data source: Curated content taxonomy tagged by country/locale and level; fallback to generic topics when locale-specific content is missing.
 - API: `/api/v1/topics?locale=nb-NO&level=B1` returns grouped topics (categories → items) for the wizard.
 - UI: Populate topics select via API; preserve grouping (optgroups) and remember last choice in preferences.
+
+
+
+
+
+
+
 
 
 

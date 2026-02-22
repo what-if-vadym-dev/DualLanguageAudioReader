@@ -11,6 +11,11 @@ env:
   CONTAINERAPP_ENV: "dual-language-audio-reader-env"
   CONTAINERAPP_NAME: "dl-audio-reader"
   IMAGE_NAME: "dual-language-audio-reader"
+  AOAI_NAME: "dual-language-audio-reader-open-ai-gpt-4o-mini"
+  AOAI_DEPLOYMENT: "gpt-4o-mini"
+  AOAI_MODEL: "gpt-4o-mini"
+  AOAI_MODEL_VERSION: "2024-07-18"
+  AOAI_API_VERSION: "2024-02-15-preview"
 
 jobs:
   provision:
@@ -32,8 +37,20 @@ jobs:
           az account set --subscription "$SUBSCRIPTION_ID"
           az provider register -n Microsoft.App --wait
           az provider register -n Microsoft.OperationalInsights --wait
+          az provider register -n Microsoft.CognitiveServices --wait
 
           az group create --name "$RESOURCE_GROUP" --location "$LOCATION"
+
+          if ! az cognitiveservices account show --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
+            az cognitiveservices account create --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" --kind OpenAI --sku S0 --location "$LOCATION" --yes
+          fi
+
+          if ! az cognitiveservices account deployment show --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" --deployment-name "$AOAI_DEPLOYMENT" >/dev/null 2>&1; then
+            az cognitiveservices account deployment create --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" --deployment-name "$AOAI_DEPLOYMENT" --model-name "$AOAI_MODEL" --model-version "$AOAI_MODEL_VERSION" --model-format OpenAI
+          fi
+
+          AOAI_ENDPOINT=$(az cognitiveservices account show --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" --query properties.endpoint -o tsv)
+          AOAI_KEY=$(az cognitiveservices account keys list --name "$AOAI_NAME" --resource-group "$RESOURCE_GROUP" --query key1 -o tsv)
 
           if ! az acr show --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
             az acr create --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" --sku Basic --admin-enabled true
@@ -60,7 +77,9 @@ jobs:
             az containerapp update \
               --name "$CONTAINERAPP_NAME" \
               --resource-group "$RESOURCE_GROUP" \
-              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG"
+              --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:$IMAGE_TAG" \
+              --secrets aoai-key=$AOAI_KEY \
+              --set-env-vars AZURE_OPENAI_ENDPOINT=$AOAI_ENDPOINT AZURE_OPENAI_DEPLOYMENT=$AOAI_DEPLOYMENT AZURE_OPENAI_API_VERSION=$AOAI_API_VERSION AZURE_OPENAI_API_KEY=secretref:aoai-key
           else
             az containerapp create \
               --name "$CONTAINERAPP_NAME" \
@@ -70,6 +89,8 @@ jobs:
               --registry-server "$ACR_LOGIN_SERVER" \
               --registry-username "$ACR_USERNAME" \
               --registry-password "$ACR_PASSWORD" \
+              --secrets aoai-key=$AOAI_KEY \
+              --env-vars AZURE_OPENAI_ENDPOINT=$AOAI_ENDPOINT AZURE_OPENAI_DEPLOYMENT=$AOAI_DEPLOYMENT AZURE_OPENAI_API_VERSION=$AOAI_API_VERSION AZURE_OPENAI_API_KEY=secretref:aoai-key \
               --ingress external \
               --target-port 8080 \
               --min-replicas 0 \
@@ -77,3 +98,4 @@ jobs:
           fi
 
           az containerapp show --name "$CONTAINERAPP_NAME" --resource-group "$RESOURCE_GROUP" --query properties.configuration.ingress.fqdn -o tsv
+

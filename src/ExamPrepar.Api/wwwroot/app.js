@@ -111,8 +111,46 @@ const targetLangSel = document.getElementById('targetLang');
 const nativeLangSel = document.getElementById('nativeLang');
 const levelSel = document.getElementById('level');
 const topicSel = document.getElementById('topic');
+const examSel = document.getElementById('examName');
 const wizardStart = document.getElementById('wizardStart');
 const wizardClose = document.getElementById('wizardClose');
+
+const examOptionsByTarget = {
+  'nb-NO': [
+    { value: 'norskprove-a1-b2', label: 'Norskprove A1-B2' },
+    { value: 'norskprove-c1', label: 'Norskproven C1 (higher academic level)' },
+    { value: 'samfunnskunnskapsprove', label: 'Samfunnskunnskapsprove' },
+    { value: 'statsborgerprove', label: 'Statsborgerprove' }
+  ],
+  'es-ES': [
+    { value: 'dele', label: 'DELE (Diplomas de Espanol como Lengua Extranjera)' },
+    { value: 'siele', label: 'SIELE (Servicio Internacional de Evaluacion)' }
+  ],
+  'de-DE': [
+    { value: 'dtz', label: 'Deutsch-Test fuer Zuwanderer (DTZ)' },
+    { value: 'test-leben-in-deutschland', label: 'Test Leben in Deutschland' }
+  ],
+  'fr-FR': [
+    { value: 'delf', label: 'DELF (Diplome d\'etudes en langue francaise)' },
+    { value: 'dalf', label: 'DALF (Diplome approfondi de langue francaise)' },
+    { value: 'tcf', label: 'TCF (Test de connaissance du francais)' }
+  ]
+};
+
+function setExamOptions(targetLang, selected) {
+  if (!examSel) return;
+  const list = examOptionsByTarget[targetLang] || [];
+  const options = list.length ? list : [{ value: 'general', label: 'General language practice' }];
+  examSel.innerHTML = '';
+  options.forEach((opt) => {
+    const option = document.createElement('option');
+    option.value = opt.value;
+    option.textContent = opt.label;
+    examSel.appendChild(option);
+  });
+  const picked = selected || options[0].value;
+  examSel.value = options.some(o => o.value === picked) ? picked : options[0].value;
+}
 
 function showWizard() { wizard.hidden = false; }
 function hideWizard() {
@@ -125,7 +163,15 @@ function fillWizard(prefs){
   try{ if(prefs.nativeLanguage) nativeLangSel.value = prefs.nativeLanguage; }catch{}
   try{ if(prefs.level) levelSel.value = prefs.level; }catch{}
   try{ if(prefs.topic) topicSel.value = prefs.topic; }catch{}
+  setExamOptions(targetLangSel ? targetLangSel.value : '', prefs.examName);
 }
+
+if (targetLangSel) {
+  targetLangSel.addEventListener('change', () => {
+    setExamOptions(targetLangSel.value, examSel ? examSel.value : undefined);
+  });
+}
+setExamOptions(targetLangSel ? targetLangSel.value : '', undefined);
 
 async function fetchTranscripts(prefs) {
   try {
@@ -158,6 +204,7 @@ wizardStart.addEventListener('click', async () => {
     targetLanguage: targetLangSel.value,
     nativeLanguage: nativeLangSel.value,
     level: levelSel.value,
+    examName: examSel ? examSel.value : undefined,
     topic: topicSel.value,
   };
   console.log('Start Reading pressed', prefs);
@@ -211,7 +258,7 @@ if (openWizardBtn) {
 // Init
 (async function init() {
   const prefs = getPrefs();
-  if (!prefs.targetLanguage || !prefs.nativeLanguage || !prefs.level || !prefs.topic) {
+  if (!prefs.targetLanguage || !prefs.nativeLanguage || !prefs.level || !prefs.examName || !prefs.topic) {
     fillWizard(prefs || {});
     showWizard();
   } else {
@@ -244,4 +291,7 @@ document.addEventListener('keydown', (e) => {
     if (typeof wizard !== 'undefined' && wizard && !wizard.hidden) hideWizard();
   }
 });
+
+
+
 
